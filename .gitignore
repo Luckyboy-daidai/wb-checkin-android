@@ -1,0 +1,14 @@
+# Gradle
+.gradle/
+build/
+
+# 本机配置
+local.properties
+
+# 构建日志
+build_log*.txt
+*.log
+
+# IDE
+.idea/
+*.iml

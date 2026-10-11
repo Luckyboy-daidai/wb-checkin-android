@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/page">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 问候区 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="16dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/ink_2"
+                        android:fontFeatureSettings="tnum" />
+
+                    <TextView
+                        android:id="@+id/tv_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/home_today"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/ink" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/btn_add"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_icon_button"
+                    android:src="@drawable/ic_add_dark"
+                    android:scaleType="centerInside"
+                    android:contentDescription="@string/fab_add" />
+            </LinearLayout>
+
+            <!-- 今日签到大卡 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:strokeWidth="0dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_hero_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <!-- 顶行：今日签到 + chip -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/tv_hero_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="今日签到"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:textColor="#4C6BA8" />
+
+                            <TextView
+                                android:id="@+id/tv_hero_chip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_badge_ok"
+                                android:paddingHorizontal="11dp"
+                                android:paddingVertical="4dp"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/ok_deep" />
+                        </LinearLayout>
+
+                        <!-- 主体行：左侧大数字 + 右侧圆环 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="18dp">
+
+                            <!-- 左侧大数字 -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="bottom">
+
+                                    <TextView
+                                        android:id="@+id/tv_hero_count_done"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textSize="50sp"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/ink"
+                                        android:fontFeatureSettings="tnum" />
+
+                                    <TextView
+                                        android:id="@+id/tv_hero_count_total"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="6dp"
+                                        android:text="/0"
+                                        android:textSize="22sp"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/ink_2"
+                                        android:fontFeatureSettings="tnum" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/tv_hero_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/ink_2" />
+                            </LinearLayout>
+
+                            <!-- 右侧圆环进度（完成态缩小让位给 IP 形象，见 updateHeroCard） -->
+                            <FrameLayout
+                                android:id="@+id/ring_box"
+                                android:layout_width="78dp"
+                                android:layout_height="78dp">
+
+                                <ProgressBar
+                                    android:id="@+id/progress_ring"
+                                    style="?android:attr/progressBarStyleHorizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:max="100"
+                                    android:progress="0"
+                                    android:progressDrawable="@drawable/progress_ring_brand" />
+
+                                <TextView
+                                    android:id="@+id/tv_ring_percent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="0%"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/brand_deep"
+                                    android:fontFeatureSettings="tnum" />
+                            </FrameLayout>
+                        </LinearLayout>
+
+                        <!-- 一键签到按钮 -->
+                        <LinearLayout
+                            android:id="@+id/btn_quick_checkin"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:background="@drawable/bg_btn_primary"
+                            android:layout_marginTop="16dp"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_check_white"
+                                android:scaleType="fitCenter" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:text="@string/home_quick_checkin"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/brand_on_primary" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- IP 形象（浮在右下角） -->
+                    <ImageView
+                        android:id="@+id/iv_mascot"
+                        android:layout_width="112dp"
+                        android:layout_height="112dp"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="6dp"
+                        android:src="@drawable/ip_mascot"
+                        android:scaleType="fitCenter"
+                        android:visibility="gone" />
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- 积分到期提示条（有 7 天内要过期的积分时显示，点击跳积分页） -->
+            <LinearLayout
+                android:id="@+id/expire_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_warn_card"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_expire_banner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:lineSpacingExtra="2dp"
+                    android:textColor="@color/warn_deep"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="8dp"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_arrow_right"
+                    app:tint="@color/warn_deep" />
+            </LinearLayout>
+
+            <!-- 旅行次卡 -->
+            <LinearLayout
+                android:id="@+id/card_travel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                android:padding="16dp"
+                android:background="@drawable/bg_card">
+
+                <!-- 左侧图标：App 桌面图标（圆形裁切） -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    app:cardCornerRadius="21dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp"
+                    app:cardBackgroundColor="@android:color/transparent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/ic_launcher"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/home_travel_title" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- 中间文字 -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_travel_title"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/ink" />
+
+                    <TextView
+                        android:id="@+id/tv_travel_sub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/ink_2" />
+                </LinearLayout>
+
+                <!-- 右箭头 -->
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_right"
+                    android:scaleType="fitCenter" />
+            </LinearLayout>
+
+            <!-- 账号列表头 -->
+            <LinearLayout
+                android:id="@+id/layout_accounts_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/home_accounts"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ink" />
+
+                <TextView
+                    android:id="@+id/tv_accounts_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/ink_2"
+                    android:fontFeatureSettings="tnum" />
+            </LinearLayout>
+
+            <!-- 账号列表 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never" />
+
+            <!-- 空状态 -->
+            <include
+                android:id="@+id/empty_view"
+                layout="@layout/empty_accounts" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- 底部分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line" />
+
+    <!-- 底部导航（四个 Tab 页此控件的属性保持完全一致，否则选中胶囊样式不统一） -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        app:menu="@menu/bottom_nav"
+        app:itemIconSize="22dp"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:labelVisibilityMode="labeled"
+        app:itemRippleColor="@color/brand_soft" />
+</LinearLayout>

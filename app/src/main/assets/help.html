@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WB签到助手 · 使用说明书</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "HarmonyOS Sans SC", "MiSans", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+    background: #F4F6FA; color: #0F172A;
+    font-size: 15px; line-height: 1.75;
+    padding: 20px 16px 48px;
+    /* 长英文单词超出行宽时强制折行，避免横向溢出；该属性可继承，覆盖全部文本 */
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  h1 { font-size: 22px; line-height: 1.4; margin-bottom: 4px; }
+  .meta { color: #64748B; font-size: 12px; margin-bottom: 18px; }
+  .card {
+    background: #FFFFFF; border-radius: 18px;
+    padding: 18px 16px; margin-bottom: 14px;
+  }
+  h2 {
+    font-size: 16px; margin-bottom: 10px;
+    padding-left: 10px; border-left: 4px solid #2F6BFF; line-height: 1.4;
+  }
+  h3 { font-size: 14.5px; margin: 14px 0 6px; color: #1E54D6; }
+  p { margin: 6px 0; color: #334155; }
+  ul, ol { padding-left: 20px; margin: 6px 0; }
+  li { margin: 5px 0; color: #334155; }
+  b, strong { color: #0F172A; }
+  .warnbox {
+    background: #FEF4E6; border: 1px solid #F5DEB4; border-radius: 14px;
+    padding: 14px; margin: 12px 0;
+  }
+  .warnbox .t { color: #B45309; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .warnbox p, .warnbox li { color: #8A5510; font-size: 14px; }
+  .step { display: flex; margin: 12px 0; }
+  .step .no {
+    flex: 0 0 26px; height: 26px; border-radius: 50%;
+    background: #2F6BFF; color: #FFF; font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center; margin-right: 10px; margin-top: 2px;
+  }
+  .step .bd { flex: 1; }
+  .step .bd .st { font-weight: 700; font-size: 15px; }
+  .step .bd p { font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13.5px; }
+  th, td { border: 1px solid #E9EDF5; padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #F1F4F9; white-space: nowrap; }
+  td { color: #334155; }
+  .qa { margin: 12px 0; }
+  .qa .q { font-weight: 700; color: #0F172A; margin-bottom: 4px; }
+  .qa .q::before { content: "Q · "; color: #2F6BFF; }
+  .qa .a { color: #334155; font-size: 14px; }
+  .qa .a::before { content: "A · "; color: #00B87C; font-weight: 700; }
+  .foot {
+    text-align: center; color: #94A3B8; font-size: 12px;
+    margin-top: 22px; line-height: 1.8;
+  }
+  .kbd {
+    background: #F1F4F9; border: 1px solid #E2E8F0; border-radius: 6px;
+    padding: 1px 6px; font-size: 13px; color: #0F172A; white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>WB签到助手 · 使用说明书</h1>
+  <div class="meta">适用版本 v1.4.3 及以上 · 更新日期 2026-10-11</div>
+
+  <div class="warnbox">
+    <div class="t">⚠️ 登录前必读：请使用「手机号验证码」登录</div>
+    <p>首次添加账号时，在官方登录页请选择 <b>手机号验证码登录</b>，<b>不要使用微信登录</b>。</p>
+    <p>原因：微信授权完成后会停留在微信内部的页面，无法返回浏览器完成授权绑定，导致本应用一直获取不到登录结果。这是官网移动端登录流程的限制，本应用无法绕过。</p>
+    <p>手机号验证码登录全程停留在原页面，已验证可以正常保存账号。</p>
+  </div>
+
+  <div class="card">
+    <h2>一、软件简介</h2>
+    <p>WB签到助手是一款独立的第三方辅助工具，用于管理你的 WorkBuddy 账号并自动完成每日签到，帮你每天稳定领取 AI 使用额度。</p>
+    <ul>
+      <li>多账号管理：WorkBuddy 账号都可以添加，支持多账号同时管理；</li>
+      <li>一键签到：所有账号一次全签，无需逐个操作；</li>
+      <li>自动签到：定时签到 ＋ 每天首次打开 App 自动签到；</li>
+      <li>积分 / 额度查询：与官网口径一致；</li>
+      <li>派猫猫旅行：自动派发、自动领奖；</li>
+      <li>签到日志：每一次签到都有记录可查；</li>
+      <li>导入 / 导出：账号库可与电脑版格式互通。</li>
+    </ul>
+    <p style="font-size:13px;color:#64748B;">说明：本应用为独立开发的第三方工具，与 WorkBuddy 官方无关联；签到、积分等数据均来自官方接口。</p>
+  </div>
+
+  <div class="card">
+    <h2>二、快速上手（3 步开始自动签到）</h2>
+
+    <div class="step">
+      <div class="no">1</div>
+      <div class="bd">
+        <div class="st">安装应用</div>
+        <p>把安装包传到手机（微信文件传输助手、数据线、网盘均可），点开安装。系统提示「未知来源应用」时选择允许。首次打开会先弹出使用说明与隐私协议，阅读确认后系统会请求通知权限，建议允许，用于推送签到结果。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="no">2</div>
+      <div class="bd">
+        <div class="st">添加账号（重点看这里）</div>
+        <p>主页右上角点 <span class="kbd">＋</span>，会弹出「选择账号版本」，有 <b>国内版</b> 和 <b>国际版</b> 两行。按你账号所属的官网选择（两个版本登录地址不同，选错了登录会失败），点「下一步」：</p>
+        <ol>
+          <li>点「打开授权页面」，会跳到浏览器打开官方登录页；</li>
+          <li>在登录页选择 <b>手机号验证码登录</b>，输入手机号、填入验证码完成登录；</li>
+          <li>看到页面显示「登录成功」后，切回本应用，账号会自动保存。</li>
+        </ol>
+        <p>如果切回后没有自动保存，点一下「我已完成授权，立即检测」按钮即可。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="no">3</div>
+      <div class="bd">
+        <div class="st">开始签到</div>
+        <p>点账号卡片即对该账号单独签到；「今日签到」大卡内有一个「一键签到」按钮，点它可一次给所有账号签到（全部签完后按钮收起，显示 IP 形象）。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>三、自动签到（核心功能）</h2>
+    <p>本应用提供两种互相独立的自动签到方式，可以只开一种，也可以都开：</p>
+    <table>
+      <tr><th>方式</th><th>触发时机</th><th>开关位置</th></tr>
+      <tr>
+        <td><b>每日定时签到</b></td>
+        <td>你设定的签到时间（可设多个时间点），到点自动执行</td>
+        <td>设置 → 自动任务 → 每日自动签到</td>
+      </tr>
+      <tr>
+        <td><b>首次打开自动签到</b></td>
+        <td>每天第一次打开 App 时自动执行一次，同一天再打开不会重复</td>
+        <td>设置 → 自动任务 → 首次打开自动签到</td>
+      </tr>
+    </table>
+    <h3>推荐配置</h3>
+    <ul>
+      <li>开启「每日自动签到」，设一个固定时间（默认 09:00），可加随机延迟，让签到时间不那么机械；</li>
+      <li>同时开启「首次打开自动签到」作为兜底：就算定时任务被系统推迟，你打开 App 的那一刻也会补签；</li>
+      <li>可选开启「每日自动 token 保活」（默认关闭，在 设置 → 自动任务 里打开）：每天 03:30 自动换新一次登录凭证（token），降低到点签到时凭证过期导致失败的概率。</li>
+    </ul>
+    <h3>开启自动签到时弹出的「电池优化」确认框是什么？</h3>
+    <p>开启「每日自动签到」开关时，系统会弹出一个「允许 <b>WB签到助手</b> 忽略电池优化吗？」的确认框，<b>建议选择「允许」</b>。</p>
+    <p>原因：Android 的省电机制（尤其国产手机的电池策略）会冻结后台应用，导致到点任务不执行。加入白名单后，系统就不会因为省电而推迟或中断本应用的定时签到任务。这个操作只影响省电策略对这一个应用的处理，不会显著增加耗电。</p>
+    <h3>到点时手机关机 / 不在场怎么办？</h3>
+    <p>定时任务基于系统级调度，重启手机后依然有效；到点时如果手机关机，开机后会尽快补签，当天不会漏签。</p>
+    <h3>排除账号</h3>
+    <p>设置 → 签到配置 → 管理签到时间与排除账号，可以指定某些账号不参与自动签到（手动签到不受影响）。</p>
+  </div>
+
+  <div class="card">
+    <h2>四、账号与数据</h2>
+    <h3>删除账号</h3>
+    <p>长按账号卡片即可删除。只从本应用移除，不影响账号本身的登录状态。</p>
+    <h3>导入 / 导出</h3>
+    <p>设置 → 数据 → 导入 / 导出账号。导出为 JSON 文件，格式与电脑版账号库完全一致、可以直接互通；导入时按账号合并，已有的账号会被覆盖更新。</p>
+    <p style="color:#B45309;font-size:13px;">注意：导出文件里包含账号的登录凭证（token），请妥善保管，不要发给他人。</p>
+  </div>
+
+  <div class="card">
+    <h2>五、其他功能</h2>
+    <h3>积分 / 额度查询</h3>
+    <p>底部 Tab「积分」，可查看每个账号的剩余积分、总额、套餐明细和最近到期时间，口径与官网一致（已过期的资源包不计入总额）。</p>
+    <h3>派猫猫旅行</h3>
+    <p>主页「派猫猫旅行」卡片进入，一键为所有可操作的账号派发旅行、领取奖励。</p>
+    <h3>签到日志</h3>
+    <p>底部 Tab「日志」，按天记录每一次签到的结果（成功 / 已签 / 跳过 / 失败），自动签到和手动签到都会记录。</p>
+  </div>
+
+  <div class="card">
+    <h2>六、常见问题（FAQ）</h2>
+
+    <div class="qa">
+      <div class="q">微信登录后，为什么一直显示"等待授权"？</div>
+      <div class="a">微信授权完成后会停留在微信内部页面，原浏览器页面无法完成授权绑定，本应用就拿不到登录结果。请改用<b>手机号验证码登录</b>，全程不会跳出浏览器，已验证稳定可用。</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">定时签到到点了没执行？</div>
+      <div class="a">国产手机（小米 / 华为 / OPPO / vivo 等）默认会冻结后台应用。开启「每日自动签到」时本应用会主动弹出电池优化白名单确认框，允许后大部分情况即可解决；个别系统（如小米的「自启动」管理）是独立开关，仍需在系统设置里手动开启。被系统推迟的任务仍会在下次机会补签，当天不会漏。</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">更新版本后，桌面图标还是旧的？</div>
+      <div class="a">这是手机桌面（启动器）的图标缓存，重启手机或把图标拖拽重新放置一次即可刷新。</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">积分显示和官网不一样？</div>
+      <div class="a">本应用与官网采用相同口径：已过期的资源包不计入总额和剩余。如果去除过期包后仍有出入，请截图官网数值反馈给开发者核对。</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">token 会过期吗？需要经常重新登录吗？</div>
+      <div class="a">不需要。这里的 token 是「登录凭证」，不是积分：它剩余有效期不足 24 小时时，应用会自动向官方换一张新的登录凭证，正常情况下登录一次长期有效；另可在设置里选开每天 03:30 的保活刷新（默认关闭）。这个机制只更新登录凭证，<b>不会增加或延长任何积分、额度</b>。</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">国际版账号支持吗？</div>
+      <div class="a">国际版账号可以添加和管理。签到能力取决于官方接口：如当前版本不支持，签到时会自动跳过，不影响其他功能；官方接口支持后，本应用会跟进更新。</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">卸载应用会丢失什么？</div>
+      <div class="a">账号与签到日志都保存在应用私有目录，卸载即全部清除。换机或卸载前，建议先在「导入 / 导出」里导出一份账号文件。</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">「积分到期提醒」是什么？会打扰吗？</div>
+      <div class="a">应用每天<b>首次打开</b>时自动查询一次各账号积分（与你打开积分页是完全相同的查询，只读、无重试），如果 7 天内将有积分过期，会发一条通知（账号多时最多列 3 行）并在首页显示黄色提示条，点击即可查看明细；积分用掉或过期后，提醒会自动消失。当天再打开不会重复检查。可在 设置 → 自动任务 里关闭。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>七、注意事项</h2>
+    <ul>
+      <li><b>本软件仅供学习研究使用</b>，请勿用于商业用途或倒卖；因使用本软件产生的一切后果由使用者自行承担；</li>
+      <li><b>本应用仅通过免费分享渠道分发</b>，未授权任何收费售卖；从第三方付费购得的版本均非开发者提供，其安全性无法保证，请通过可信渠道获取更新；</li>
+      <li>本应用支持添加 WorkBuddy 多账号；个别账号如遇官方接口暂不支持签到，会自动跳过，不影响其他账号；</li>
+      <li>本应用不修改、不代理你的任何官方账号密码，授权由官方登录页完成；</li>
+      <li>若官方接口发生变更导致功能异常，请向提供者获取更新版本；</li>
+      <li>本应用由开发者独立分发，未在任何应用商店上架，不含广告与数据统计组件。</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    WB签到助手 · 使用说明书<br>
+    本应用为第三方辅助工具，与 WorkBuddy 官方无关
+  </div>
+</div>
+</body>
+</html>

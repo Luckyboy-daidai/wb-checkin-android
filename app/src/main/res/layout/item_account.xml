@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginTop="10dp"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="1dp"
+    app:cardBackgroundColor="@color/surface"
+    app:strokeColor="@color/line"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingVertical="11dp"
+        android:paddingHorizontal="16dp">
+
+        <!-- 头像 -->
+        <FrameLayout
+            android:id="@+id/layout_avatar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_avatar_brand"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+        </FrameLayout>
+
+        <!-- 中间内容 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <!-- 账号名 + 版本标签：名字过长时跑马灯滚动，标签与徽章不被挤压 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ink"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever" />
+            </LinearLayout>
+
+            <!-- 副行 -->
+            <TextView
+                android:id="@+id/tv_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textSize="12sp"
+                android:textColor="@color/ink_2"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+
+        <!-- 右侧：版本标签（上）+ 状态徽章（下），上下排列、大小一致 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/tv_variant"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:minWidth="64dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:background="@drawable/bg_tag_brand"
+                android:paddingHorizontal="8dp"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/brand_deep" />
+
+            <LinearLayout
+                android:id="@+id/layout_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:minWidth="64dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/bg_badge_ok"
+                android:paddingHorizontal="8dp">
+
+            <ImageView
+                android:id="@+id/iv_badge_dot"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/dot_ok"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:id="@+id/tv_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/ok_deep" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

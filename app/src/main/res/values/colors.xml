@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 品牌 -->
+    <color name="brand_primary">#2F6BFF</color>       <!-- 主操作、选中态、进度条（色块档） -->
+    <color name="brand_deep">#1E54D6</color>          <!-- 品牌蓝【文字专用】 -->
+    <color name="brand_soft">#EDF3FF</color>          <!-- 品牌浅底（标签底、图标底） -->
+    <color name="brand_grad_start">#2F6BFF</color>    <!-- 渐变起（135°） -->
+    <color name="brand_grad_end">#5B8CFF</color>      <!-- 渐变止 -->
+    <color name="brand_on_primary">#FFFFFF</color>
+
+    <!-- 成功 / 已完成 -->
+    <color name="ok">#00B87C</color>                  <!-- 色块档：圆环、进度条、圆点 -->
+    <color name="ok_deep">#00714E</color>             <!-- 成功绿【文字专用】 -->
+    <color name="ok_soft">#E6F8F1</color>
+
+    <!-- 提醒 / 待留意 -->
+    <color name="warn">#F59E0B</color>                <!-- 色块档：进度条告警、图标 -->
+    <color name="warn_deep">#B45309</color>           <!-- 琥珀【文字专用】 -->
+    <color name="warn_soft">#FEF4E6</color>
+
+    <!-- 危险（全 App 只用于删除） -->
+    <color name="err">#C62828</color>
+    <color name="err_soft">#FEF0F0</color>
+
+    <!-- 文字 -->
+    <color name="ink">#0F172A</color>                 <!-- 主文字 -->
+    <color name="ink_2">#64748B</color>               <!-- 次要文字（白卡上） -->
+    <color name="ink_muted">#5F7086</color>           <!-- 说明文字（灰底上） -->
+    <color name="ink_3">#94A3B8</color>               <!-- 【只用于图标、描边、分割线，不写文字】 -->
+
+    <!-- 背景与线 -->
+    <color name="page">#F4F6FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="line">#E9EDF5</color>
+    <color name="line_2">#F1F4F9</color>
+    <color name="progress_track">#EDF1F7</color>
+
+    <!-- 新增：改版 UI 辅助色 -->
+    <color name="ghost_stroke">#C9D6F0</color>
+    <color name="ghost_bg">#F8FAFF</color>
+    <color name="info_card_stroke">#D8E2F5</color>
+    <color name="info_card_bg">#FBFCFE</color>
+    <color name="ip_stroke">#E3EBFB</color>
+
+    <!-- 兼容旧名称（逐步替换中） -->
+    <color name="ok_green">@color/ok_deep</color>
+    <color name="warn_orange">@color/warn_deep</color>
+    <color name="err_red">@color/err</color>
+    <color name="muted_gray">@color/ink_2</color>
+    <color name="status_ok">@color/ok</color>
+    <color name="status_fail">@color/err</color>
+    <color name="status_warn">@color/warn</color>
+    <color name="text_primary">@color/ink</color>
+    <color name="text_secondary">@color/ink_2</color>
+</resources>

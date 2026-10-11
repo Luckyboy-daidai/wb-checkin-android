@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 页面与间距 -->
+    <dimen name="page_padding">16dp</dimen>
+    <dimen name="card_gap">12dp</dimen>
+    <dimen name="card_account_gap">10dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+    <dimen name="card_hero_padding">20dp</dimen>
+    <dimen name="card_account_padding_v">11dp</dimen>
+    <dimen name="card_credit_padding_v">13dp</dimen>
+    <dimen name="settings_row_padding_v">13dp</dimen>
+    <dimen name="section_gap">22dp</dimen>
+
+    <!-- 圆角 -->
+    <dimen name="radius_hero">24dp</dimen>
+    <dimen name="radius_card">18dp</dimen>
+    <dimen name="radius_btn_primary">16dp</dimen>
+    <dimen name="radius_btn_small">13dp</dimen>
+    <dimen name="radius_icon_md">12dp</dimen>
+    <dimen name="radius_icon_lg">15dp</dimen>
+    <dimen name="radius_avatar_md">14dp</dimen>
+    <dimen name="radius_avatar_sm">12dp</dimen>
+    <dimen name="radius_badge">999dp</dimen>
+    <dimen name="radius_tag">6dp</dimen>
+
+    <!-- 按钮 -->
+    <dimen name="btn_primary_height">50dp</dimen>
+    <dimen name="btn_small_height">40dp</dimen>
+    <dimen name="btn_ghost_height">48dp</dimen>
+
+    <!-- 底部 Tab -->
+    <dimen name="tabbar_height">66dp</dimen>
+    <dimen name="tab_icon">22dp</dimen>
+    <dimen name="tab_text">10sp</dimen>
+
+    <!-- 字号 -->
+    <dimen name="text_display">50sp</dimen>
+    <dimen name="text_h1">42sp</dimen>
+    <dimen name="text_h2">29sp</dimen>
+    <dimen name="text_h3">22sp</dimen>
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_card_title">16sp</dimen>
+    <dimen name="text_body_l">15sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_body_s">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_badge">11sp</dimen>
+    <dimen name="text_tab">10sp</dimen>
+
+    <!-- 图标与头像 -->
+    <dimen name="icon_md">22dp</dimen>
+    <dimen name="icon_sm">16dp</dimen>
+    <dimen name="avatar_md">44dp</dimen>
+    <dimen name="avatar_sm">38dp</dimen>
+    <dimen name="avatar_xs">34dp</dimen>
+
+    <!-- 圆环进度 -->
+    <dimen name="ring_lg">92dp</dimen>
+    <dimen name="ring_sm">78dp</dimen>
+    <dimen name="ring_stroke">10dp</dimen>
+
+    <!-- IP 形象 -->
+    <dimen name="ip_height">112dp</dimen>
+    <dimen name="ip_empty_width">176dp</dimen>
+    <dimen name="ip_about_size">60dp</dimen>
+
+    <!-- 卡片描边 -->
+    <dimen name="card_stroke">1dp</dimen>
+    <dimen name="card_elevation">1dp</dimen>
+    <dimen name="hero_elevation">2dp</dimen>
+    <dimen name="btn_elevation">4dp</dimen>
+</resources>

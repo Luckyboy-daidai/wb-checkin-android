@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="22dp"
+    android:height="22dp"
+    android:viewportWidth="22"
+    android:viewportHeight="22">
+    <!-- 选中态：实心圆 -->
+    <path
+        android:fillColor="#2F6BFF"
+        android:pathData="M11,2C6.03,2 2,6.03 2,11C2,15.97 6.03,20 11,20C15.97,20 20,15.97 20,11C20,6.03 15.97,2 11,2Z" />
+</vector>
