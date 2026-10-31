@@ -226,14 +226,16 @@ public class TravelActivity extends AppCompatActivity {
                 adapter.setData(results);
                 updateSummary(results);
 
-                // 原有统计 Toast 保留
-                int ok = 0, already = 0, fail = 0;
+                // 原有统计 Toast 保留（四分类：claimed 必须先于 already 判定）
+                int dispatched = 0, ended = 0, skipped = 0, failed = 0;
                 for (JSONObject r : results) {
-                    if (!r.optBoolean("ok", false)) fail++;
-                    else if (r.optBoolean("already", false)) already++;
-                    else ok++;
+                    if (!r.optBoolean("ok", false)) failed++;
+                    else if (r.optBoolean("claimed", false)) ended++;
+                    else if (r.optBoolean("already", false)) skipped++;
+                    else dispatched++;
                 }
-                Toast.makeText(this, getString(R.string.travel_summary, ok, already, fail),
+                Toast.makeText(this,
+                        getString(R.string.travel_summary, dispatched, ended, skipped, failed),
                         Toast.LENGTH_LONG).show();
             });
         });
