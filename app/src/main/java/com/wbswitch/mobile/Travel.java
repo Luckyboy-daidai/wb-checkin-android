@@ -231,7 +231,8 @@ public final class Travel {
                         result.put("state", "idle");
                         result.put("skip", "daily-limit");
                         result.put("message", "今日已派");
-                        result.put("claimed", true);
+                        // v1.4.8：不再置 claimed=true——本次无动作应计"跳过"；
+                        // classifyState 对 idle+daily-limit 同样判 STATE_DAILY_LIMIT，UI 不受影响
                         return result;
                     }
                     return doDepart(ctx, account, result);
@@ -301,7 +302,7 @@ public final class Travel {
                     result.put("state", "idle");
                     result.put("skip", "daily-limit");
                     result.put("message", "今日已派");
-                    result.put("claimed", true);
+                    // v1.4.8：同上，本次无动作计"跳过"
                 } catch (Exception ignored) {}
                 return result;
             }
@@ -348,6 +349,8 @@ public final class Travel {
                     result.put("message", "已领取");
                 } else if (raw.contains("not arrived yet")) {
                     result.put("state", "arrived");
+                    // v1.4.8：本次无动作（状态竞态）应计"跳过"；UI 仍按 arrived 显示可领奖
+                    result.put("already", true);
                     result.put("message", "尚未到达");
                 } else {
                     result.put("ok", false);

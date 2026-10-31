@@ -10,8 +10,8 @@ android {
         applicationId "com.wbswitch.mobile"
         minSdk 26
         targetSdk 34
-        versionCode 33
-        versionName "1.4.5"
+        versionCode 36
+        versionName "1.4.8"
     }
 
     buildTypes {
