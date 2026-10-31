@@ -158,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
         // 积分到期检查：每天首次打开一次（异步，完成后刷新首页提示条）
         maybeExpireCheck();
         renderExpireBanner();
+        // 旅行卡状态摘要：只读查询、60 秒节流，离开页面即停
+        maybeRefreshTravelSummary();
         refreshStatusesInBackground();
         // 应用启动时兜底重排自动签到（幂等：KEEP 策略）
         if (Prefs.autoEnabled(this)) AutoScheduler.scheduleNext(this);
@@ -182,14 +184,8 @@ public class MainActivity extends AppCompatActivity {
         layoutAccountsHeader.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         tvAccountsCount.setText(getString(R.string.home_accounts_count, accounts.size()));
 
-        // 更新旅行卡副标题（国内版账号数）
-        int cnCount = 0;
-        for (JSONObject acc : accounts) {
-            if (Api.supportsCheckin(acc.optString("variant", "cn"))) {
-                cnCount++;
-            }
-        }
-        tvTravelSub.setText(getString(R.string.home_travel_sub, cnCount));
+        // 旅行卡副标题：真实状态由 maybeRefreshTravelSummary 异步刷新（60 秒节流）
+        tvTravelSub.setText(R.string.home_travel_summary_idle);
 
         // 更新 Hero Card
         updateHeroCard();
@@ -537,6 +533,43 @@ public class MainActivity extends AppCompatActivity {
             androidx.core.app.ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
         }
+    }
+
+    /** 旅行卡状态摘要：60 秒节流的只读查询，更新副标题为真实状态。 */
+    private long lastTravelQueryAt = 0L;
+
+    private void maybeRefreshTravelSummary() {
+        if (pool.isShutdown() || isDestroyed() || isFinishing()) return;
+        long now = System.currentTimeMillis();
+        if (now - lastTravelQueryAt < 60_000L) return;
+        lastTravelQueryAt = now;
+        List<JSONObject> travelAccounts = new ArrayList<>();
+        for (JSONObject acc : AccountStore.loadAccounts(this)) {
+            if (Travel.supportsTravel(acc)) travelAccounts.add(acc);
+        }
+        if (travelAccounts.isEmpty()) {
+            tvTravelSub.setText(R.string.home_travel_summary_idle);
+            return;
+        }
+        tvTravelSub.setText(R.string.home_travel_summary_querying);
+        final List<JSONObject> snapshot = travelAccounts;
+        pool.execute(() -> {
+            int canDispatch = 0, canClaim = 0, traveling = 0;
+            for (JSONObject acc : snapshot) {
+                if (isDestroyed() || isFinishing()) return;
+                JSONObject st = Travel.fetchStatus(getApplicationContext(), acc);
+                if (!st.optBoolean("ok", false)) continue;
+                String state = st.optString("state", "");
+                if ("arrived".equals(state)) canClaim++;
+                else if ("traveling".equals(state)) traveling++;
+                else if ("idle".equals(state)) canDispatch++;
+            }
+            final int fD = canDispatch, fC = canClaim, fT = traveling;
+            runOnUiThread(() -> {
+                if (isDestroyed() || isFinishing()) return;
+                tvTravelSub.setText(getString(R.string.home_travel_summary_fmt, fD, fC, fT));
+            });
+        });
     }
 
     /** 首次启动弹出使用说明 + 隐私协议入口；点"我已阅读并同意"后不再出现。 */

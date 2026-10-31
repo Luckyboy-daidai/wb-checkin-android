@@ -94,7 +94,7 @@
     <string name="menu_travel">派猫猫旅行</string>
     <string name="travel_run">立即派发 / 领奖</string>
     <string name="travel_running">正在处理旅行…</string>
-    <string name="travel_summary">旅行完成：派发 %1$d · 已结束 %2$d · 失败 %3$d</string>
+    <string name="travel_summary">旅行完成：派发 %1$d · 已结束 %2$d · 跳过 %3$d · 失败 %4$d</string>
     <string name="travel_empty">还没有账号</string>
 
     <!-- 派猫猫旅行改版 -->
@@ -200,6 +200,9 @@
     <string name="home_accounts_count">%1$d个</string>
     <string name="home_travel_title">派猫猫旅行</string>
     <string name="home_travel_sub">%1$d 个账号可派发</string>
+    <string name="home_travel_summary_fmt">%1$d 可派发 · %2$d 可领奖 · %3$d 旅行中</string>
+    <string name="home_travel_summary_idle">点击查看旅行状态</string>
+    <string name="home_travel_summary_querying">正在获取旅行状态…</string>
     <string name="home_quick_checkin">一键签到</string>
 
     <!-- 空状态 -->

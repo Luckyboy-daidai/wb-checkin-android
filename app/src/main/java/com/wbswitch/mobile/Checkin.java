@@ -211,20 +211,26 @@ public final class Checkin {
         return last == null ? o : last;
     }
 
-    /** 查询签到状态：checkin-activity-status 失败回落 checkin-status。 */
+    /** 查询签到状态：checkin-activity-status 仅在 404（路由不存在）时回落
+     *  checkin-status；401/5xx 等直接返回失败（避免对已失效凭证重复请求），
+     *  失败响应携带 code 供上层判定是否需要重新登录。 */
     public static JSONObject getCheckinStatus(Context ctx, JSONObject account) {
         String variant = account.optString("variant", "cn");
         if ("cn".equals(variant)) {
+            JSONObject last = null;
             for (String suffix : new String[]{"/checkin-activity-status", "/checkin-status"}) {
                 JSONObject resp = checkinRequest(ctx, account, suffix);
                 JSONObject status = statusFromResponse(resp);
                 if (status != null) return status;
-                if (suffix.endsWith("/checkin-status")) {
-                    JSONObject o = new JSONObject();
-                    put(o, "ok", false);
-                    put(o, "error", firstMessage(resp, resp.optJSONObject("data")));
-                    return o;
-                }
+                last = resp;
+                if (!Api.isRouteMissing(resp)) break;
+            }
+            if (last != null) {
+                JSONObject o = new JSONObject();
+                put(o, "ok", false);
+                put(o, "error", firstMessage(last, last.optJSONObject("data")));
+                put(o, "code", last.optLong("code", -1));
+                return o;
             }
         }
         JSONObject o = new JSONObject();
@@ -280,6 +286,16 @@ public final class Checkin {
             JSONObject status = getCheckinStatus(ctx, account);
             boolean statusUnsupported = status.optBoolean("statusUnsupported", false);
             if (!statusUnsupported && !status.optBoolean("ok", false)) {
+                // 401/403 且账号没有续期凭证：tok en 已被服务端拒绝且无法自愈，
+                // 明确标记需要重新登录，而不是一直误导性地显示"去签到"
+                long code = status.optLong("code", -1);
+                boolean unauthorized = code == 401 || code == 403
+                        || status.optString("error", "").contains("401");
+                if (unauthorized && account.optString("refresh_token", "").isEmpty()) {
+                    put(account, "needs_relogin", true);
+                    put(account, "needs_relogin_reason", "登录凭证已被服务端拒绝且无法自动换新，请删除账号后重新登录");
+                    AccountStore.upsertAccount(appCtx, account);
+                }
                 return result("error", status.optString("error", "查询签到状态失败"));
             }
             if (!statusUnsupported && status.optBoolean("todayCheckedIn", false)) {
