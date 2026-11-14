@@ -14,4 +14,8 @@ cd /d X:\
 set "JAVA_HOME=Y:\jdk\jdk-17.0.20.1+1"
 set "ANDROID_HOME=Y:\sdk"
 call Y:\gradle\gradle-8.7\bin\gradle.bat assembleRelease --no-daemon
-echo BUILD_EXIT=%ERRORLEVEL%
+set BUILD_EXIT=%ERRORLEVEL%
+cd /d "%~dp0"
+subst X: /d >nul 2>&1
+subst Y: /d >nul 2>&1
+echo BUILD_EXIT=%BUILD_EXIT%
