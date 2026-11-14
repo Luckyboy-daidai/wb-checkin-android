@@ -15,7 +15,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,41 +26,49 @@
         <activity
             android:name=".LoginActivity"
             android:exported="false"
-            android:label="@string/title_add_account" />
+            android:label="@string/title_add_account"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".LogsActivity"
             android:exported="false"
-            android:label="@string/title_logs" />
+            android:label="@string/title_logs"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
-            android:label="@string/title_settings" />
+            android:label="@string/title_settings"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".CreditsActivity"
             android:exported="false"
-            android:label="@string/title_credits" />
+            android:label="@string/title_credits"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".TravelActivity"
             android:exported="false"
-            android:label="@string/title_travel" />
+            android:label="@string/title_travel"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ExportImportActivity"
             android:exported="false"
-            android:label="@string/title_export_import" />
+            android:label="@string/title_export_import"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".TimeSettingsActivity"
             android:exported="false"
-            android:label="@string/title_time_settings" />
+            android:label="@string/title_time_settings"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".DocsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".BootReceiver"

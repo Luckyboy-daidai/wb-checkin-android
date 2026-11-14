@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Wbswitch" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- 固定使用浅色主题：页面配色为浅色定制，深色模式会出现文字/背景对比错乱，故不跟随系统 -->
+    <style name="Theme.Wbswitch" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/brand_primary</item>
         <item name="android:statusBarColor">@color/brand_primary</item>
+        <!-- 关闭强制深色（系统对不支持深色的应用做自动反色）；API 29+ 生效，低版本自动忽略 -->
+        <item name="android:forceDarkAllowed">false</item>
     </style>
 </resources>

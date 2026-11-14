@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -71,7 +72,20 @@ public class ExportImportActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    /**
+     * 导出前二次确认：导出文件含明文 token，先提示风险再进入 SAF 选择文件。
+     */
     private void openExportPicker() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.export_confirm_title)
+                .setMessage(R.string.export_confirm_msg)
+                .setNegativeButton(R.string.export_confirm_cancel, null)
+                .setPositiveButton(R.string.export_confirm_ok, (d, w) -> launchExportPicker())
+                .show();
+    }
+
+    /** 真正启动 SAF 创建文档流程（已通过二次确认）。 */
+    private void launchExportPicker() {
         String fileName = "wb_accounts_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
                 .format(new Date()) + ".json";
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
