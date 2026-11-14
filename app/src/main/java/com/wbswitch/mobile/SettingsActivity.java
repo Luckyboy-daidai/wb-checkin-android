@@ -1,10 +1,13 @@
 package com.wbswitch.mobile;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -84,13 +88,12 @@ public class SettingsActivity extends AppCompatActivity {
         swKeepAlive.setChecked(Prefs.tokenKeepAliveEnabled(this));
         swKeepAlive.setOnCheckedChangeListener((btn, checked) -> {
             Prefs.setTokenKeepAliveEnabled(this, checked);
-            if (checked) {
-                TokenKeepAliveScheduler.scheduleNext(this);
-                Toast.makeText(this, R.string.settings_token_keep_alive_on, Toast.LENGTH_SHORT).show();
-            } else {
-                TokenKeepAliveScheduler.cancel(this);
-                Toast.makeText(this, R.string.settings_token_keep_alive_off, Toast.LENGTH_SHORT).show();
-            }
+            // 保活不再排定时任务：改为「每天首次打开 App 时触发一次」，
+            // 这里只需落盘开关，下次打开 App 由 MainActivity 判断是否执行
+            Toast.makeText(this, checked
+                            ? R.string.settings_token_keep_alive_on
+                            : R.string.settings_token_keep_alive_off,
+                    Toast.LENGTH_SHORT).show();
         });
 
         swFirstOpenCheckin.setChecked(Prefs.firstOpenCheckinEnabled(this));
@@ -111,6 +114,15 @@ public class SettingsActivity extends AppCompatActivity {
                             ? R.string.settings_expire_on
                             : R.string.settings_expire_off,
                     Toast.LENGTH_SHORT).show();
+            // 打开开关时若缺通知权限，提示只有应用内提示；开关照常按用户选择保存
+            if (checked
+                    && Build.VERSION.SDK_INT >= 33
+                    && ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.POST_NOTIFICATIONS)
+                            != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, R.string.notify_permission_hint_settings,
+                        Toast.LENGTH_LONG).show();
+            }
         });
 
         updateTimeLabel(tvTime);

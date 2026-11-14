@@ -6,12 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import org.json.JSONObject;
-
-import java.util.List;
-
 /**
- * 每日自动 token 保活：在签到时间前刷新全部账号 token，降低到点签到时 token 过期的概率。
+ * 历史遗留的 token 保活定时任务（保留类，避免旧设备队列里的任务反序列化失败）。
+ *
+ * 当前策略是「每天首次打开 App 时触发一次」，新版本不会再排这个任务；
+ * 但升级前已经入队的任务仍可能被系统拉起执行，此时只做一次性刷新，
+ * 不再自排下一天，保证不会与首开触发叠加。
  */
 public class TokenKeepAliveWorker extends Worker {
 
@@ -22,25 +22,8 @@ public class TokenKeepAliveWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Context ctx = getApplicationContext();
-        List<JSONObject> accounts = AccountStore.loadAccounts(ctx);
-        int ok = 0, fail = 0;
-        for (JSONObject acc : accounts) {
-            String rt = acc.optString("refresh_token", "");
-            if (rt.isEmpty()) continue;
-            try {
-                JSONObject refreshed = Checkin.refreshToken(ctx, acc);
-                if (!refreshed.optBoolean("needs_relogin", false)) {
-                    ok++;
-                } else {
-                    fail++;
-                }
-            } catch (Exception e) {
-                fail++;
-            }
-        }
-        // Worker 内部自排程用 APPEND 策略，避免 REPLACE 取消当前正在运行的任务
-        TokenKeepAliveScheduler.scheduleAfterCurrent(ctx);
+        // 只跑一次、不重排：保活已改为首开触发
+        TokenKeepAlive.runOnce(getApplicationContext());
         return Result.success();
     }
 }

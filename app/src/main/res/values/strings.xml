@@ -63,10 +63,10 @@
     <string name="settings_auto_sub">每天在设定时间自动为国内版账号签到；登录凭证（token）快过期时会自动换新，无需重新登录</string>
     <string name="settings_auto_on">已开启每日自动签到</string>
     <string name="settings_auto_off">已关闭每日自动签到</string>
-    <string name="settings_token_keep_alive_title">每日自动 token 保活</string>
-    <string name="settings_token_keep_alive_sub">每天 03:30 自动换新一次登录凭证（token），避免到点签到时凭证过期失效</string>
-    <string name="settings_token_keep_alive_on">已开启每日自动 token 保活</string>
-    <string name="settings_token_keep_alive_off">已关闭每日自动 token 保活</string>
+    <string name="settings_token_keep_alive_title">每日首次打开自动保活</string>
+    <string name="settings_token_keep_alive_sub">每天第一次打开 App 时自动换新一次登录凭证（token），同一天不重复，避免到点签到时凭证过期失效</string>
+    <string name="settings_token_keep_alive_on">已开启：每天首次打开 App 时自动保活</string>
+    <string name="settings_token_keep_alive_off">已关闭自动 token 保活</string>
     <string name="settings_first_open_checkin_title">首次打开自动签到</string>
     <string name="settings_first_open_checkin_sub">每天第一次打开 APP 时自动为国内版账号签到一次，之后再次打开不重复</string>
     <string name="settings_first_open_checkin_on">已开启首次打开自动签到</string>
@@ -286,4 +286,14 @@
     <string name="import_desc">按 uid 合并，已存在的账号会被覆盖 token 等字段，本地备注会保留。</string>
     <string name="import_btn">选择文件导入</string>
     <string name="export_import_bottom_hint">导出文件是标准 JSON 数组，也可以拿到电脑上用。导入时没有 access_token 的条目会自动跳过。</string>
+
+    <!-- 新增：导出二次确认（明文凭证外泄风险提示） -->
+    <string name="export_confirm_title">确认导出？</string>
+    <string name="export_confirm_msg">导出的文件包含账号登录凭证（token），请勿分享给他人或上传网络。建议导出后妥善保管。</string>
+    <string name="export_confirm_ok">继续导出</string>
+    <string name="export_confirm_cancel">取消</string>
+
+    <!-- 新增：通知权限被拒绝 -->
+    <string name="notify_permission_denied">未授予通知权限：积分到期仍会在应用内提示，但不会发送系统通知；可在系统设置中开启通知权限。</string>
+    <string name="notify_permission_hint_settings">通知权限未开启：积分到期只会显示应用内提示，不会发送系统通知。可在系统设置中开启通知权限。</string>
 </resources>

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +42,10 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final ExecutorService pool = Executors.newSingleThreadExecutor();
+    // 2 线程：保活/签到与只读任务并行，避免多账号首屏排队数十秒
+    private final ExecutorService pool = Executors.newFixedThreadPool(2);
+    /** 主线程 Handler：用于延迟触发权限申请，Activity 销毁时需移除回调 */
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private AccountAdapter adapter;
     private RecyclerView recycler;
     private View emptyView;
@@ -142,16 +147,25 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // 先弹首启说明书/隐私协议，用户同意后再请求通知权限，
+        // 先弹首启说明书/隐私协议，用户点"我已阅读并同意"后再请求通知权限，
         // 避免 Android 13+ 上系统权限框和 onboarding 弹窗叠加
-        maybeShowOnboarding();
-        requestNotificationPermissionIfNeeded();
+        boolean onboardingShown = maybeShowOnboarding();
+        if (!onboardingShown) {
+            // onboarding 已完成（无需弹窗）：延迟到首屏渲染与 Toast 之后再申请
+            mainHandler.postDelayed(this::requestNotificationPermissionIfNeeded, 800L);
+        }
+
+        // 一次性清理：token 保活已改为首开触发，取消升级前遗留的定时排程（幂等）
+        TokenKeepAliveScheduler.cancel(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         reloadAccounts();
+        // 首次打开保活要先于首次打开签到提交：先换新 token，签到成功率更高；
+        // 签到内部的 ensureFreshToken 看到凭证已新鲜会直接跳过，不会重复请求
+        maybeFirstOpenKeepAlive();
         // 首次打开签到要先于状态刷新提交（单线程池按提交顺序执行），
         // 否则一轮状态查询会把签到压后几十秒
         maybeFirstOpenCheckin();
@@ -171,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         if (onboardingDialog != null && onboardingDialog.isShowing()) {
             onboardingDialog.dismiss();
         }
+        mainHandler.removeCallbacksAndMessages(null);
         pool.shutdownNow();
         super.onDestroy();
     }
@@ -306,6 +321,45 @@ public class MainActivity extends AppCompatActivity {
                     updateHeroCard();
                 });
             }
+        });
+    }
+
+    /**
+     * 每天首次打开 APP 时静默保活一次：把全部账号的登录凭证（token）换新。
+     * 与「每天首次打开自动签到」同一套日期去重模式：当天触发过就不再重复。
+     * 不弹 Toast（与首开签到的主动提示区分，避免打开 App 连弹提示）。
+     */
+    private void maybeFirstOpenKeepAlive() {
+        // 签到回调可能在 onDestroy 之后才回到 UI 线程，此时线程池已关闭，再 execute 会崩
+        if (pool.isShutdown()) return;
+        if (!Prefs.tokenKeepAliveEnabled(this)) return;
+        List<JSONObject> accounts = AccountStore.loadAccounts(this);
+        if (accounts.isEmpty()) return;
+
+        // 没有任何可刷新的账号（全部缺少 refresh token）时不执行，也不占当日标记
+        boolean hasRefreshable = false;
+        for (JSONObject acc : accounts) {
+            if (!acc.optString("refresh_token", "").trim().isEmpty()) {
+                hasRefreshable = true;
+                break;
+            }
+        }
+        if (!hasRefreshable) return;
+
+        String today = Checkin.dateStr(System.currentTimeMillis());
+        if (today.equals(Prefs.lastOpenKeepAliveDate(this))) return;
+
+        // 先标记今天已触发，防止 onResume 再次调用时重复保活
+        Prefs.setLastOpenKeepAliveDate(this, today);
+
+        pool.execute(() -> {
+            TokenKeepAlive.runOnce(getApplicationContext());
+            runOnUiThread(() -> {
+                // Activity 已销毁时不再操作 UI，避免抛异常
+                if (isDestroyed() || isFinishing()) return;
+                // 静默刷新账号卡（主要是凭证有效期显示）
+                reloadAccounts();
+            });
         });
     }
 
@@ -535,6 +589,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 通知权限申请结果：拒绝时只做提示，不擅自改动"积分到期提醒"这个独立业务开关。
+     * 缺少通知权限只意味着发不出系统通知，应用内提示条仍可用，属于可解释的降级。
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != 100) return;
+        boolean granted = grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        if (granted) return;
+        Toast.makeText(this, R.string.notify_permission_denied, Toast.LENGTH_LONG).show();
+    }
+
     /** 旅行卡状态摘要：60 秒节流的只读查询，更新副标题为真实状态。 */
     private long lastTravelQueryAt = 0L;
 
@@ -572,15 +641,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /** 首次启动弹出使用说明 + 隐私协议入口；点"我已阅读并同意"后不再出现。 */
-    private void maybeShowOnboarding() {
-        if (Prefs.isOnboardingDone(this)) return;
+    /**
+     * 首次启动弹出使用说明 + 隐私协议入口；点"我已阅读并同意"后不再出现。
+     *
+     * @return 本次是否弹出了 onboarding 弹窗（未弹出说明用户此前已同意）
+     */
+    private boolean maybeShowOnboarding() {
+        if (Prefs.isOnboardingDone(this)) return false;
         onboardingDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.onboarding_title)
                 .setMessage(R.string.onboarding_message)
                 .setCancelable(false)
-                .setPositiveButton(R.string.onboarding_agree, (d, w) ->
-                        Prefs.setOnboardingDone(this, true))
+                .setPositiveButton(R.string.onboarding_agree, (d, w) -> {
+                    Prefs.setOnboardingDone(this, true);
+                    // 用户看完隐私说明后再申请通知权限（Android 13+ 才有实际动作）
+                    mainHandler.postDelayed(this::requestNotificationPermissionIfNeeded, 300L);
+                })
                 .setNegativeButton(R.string.onboarding_read_help, null)
                 .setNeutralButton(R.string.onboarding_read_privacy, null)
                 .create();
@@ -592,6 +668,7 @@ public class MainActivity extends AppCompatActivity {
         onboardingDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v ->
                 startActivity(new Intent(this, DocsActivity.class)
                         .putExtra(DocsActivity.EXTRA_DOC, DocsActivity.DOC_PRIVACY)));
+        return true;
     }
 
     // ------------------------------------------------------------------ adapter

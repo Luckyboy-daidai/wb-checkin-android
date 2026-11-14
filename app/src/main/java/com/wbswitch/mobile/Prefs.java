@@ -23,6 +23,7 @@ public final class Prefs {
     public static final String KEY_EXCLUDED_ACCOUNTS = "excluded_accounts";
     public static final String KEY_FIRST_OPEN_CHECKIN = "first_open_checkin";
     public static final String KEY_LAST_OPEN_CHECKIN_DATE = "last_open_checkin_date";
+    public static final String KEY_LAST_OPEN_KEEP_ALIVE_DATE = "last_open_keep_alive_date";
 
     private Prefs() {}
 
@@ -52,6 +53,7 @@ public final class Prefs {
         sp(ctx).edit().putInt(KEY_JITTER_MIN, minutes).apply();
     }
 
+    /** 是否在每天首次打开 APP 时自动保活刷新一次 token（默认关闭）。 */
     public static boolean tokenKeepAliveEnabled(Context ctx) {
         return sp(ctx).getBoolean(KEY_TOKEN_KEEP_ALIVE, false);
     }
@@ -130,6 +132,15 @@ public final class Prefs {
 
     public static void setLastOpenCheckinDate(Context ctx, String date) {
         sp(ctx).edit().putString(KEY_LAST_OPEN_CHECKIN_DATE, date).apply();
+    }
+
+    /** 上次在每天首次打开 APP 时执行 token 保活的日期（yyyy-MM-dd），当天不重复。 */
+    public static String lastOpenKeepAliveDate(Context ctx) {
+        return sp(ctx).getString(KEY_LAST_OPEN_KEEP_ALIVE_DATE, "");
+    }
+
+    public static void setLastOpenKeepAliveDate(Context ctx, String date) {
+        sp(ctx).edit().putString(KEY_LAST_OPEN_KEEP_ALIVE_DATE, date).apply();
     }
 
     public static final String KEY_EXPIRE_REMINDER = "expire_reminder";
